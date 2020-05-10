@@ -1,0 +1,95 @@
+df.duplicateed(keep='first')
+df.drop_duplicates(keep='first')
+
+if keep=False --> remove unique and the duplicate
+------------------------------
+df.unique( )
+df.nunique( )
+df.astype('int/float/category')
+df.nsmallest( )
+df.nlargest( )
+======================
+Filtering
+df[mask1 & mask2] //and condition( AND- & )
+
+df[mask1 | mask2] // or condition( OR-| )
+
+df.query('Salary' >2000 )
+============================
+mask = df['Team'].isin(['Legal','Sales','Product'])
+if we want filter certain values in one column, either we can use multiple (mask_var) with OR operater else we can use .isin
+    df[ mask ]
+==============================
+mask = df['Team].isnull( )
+df[mask]  // it will give all null value in team column
+
+mask2= df['Gender'].notnull( )
+df[mask2] // it will give rows having not null values
+=========================
+ mask= df['Salary'].between(20000,30000)
+-- it works for number, date,time
+===========================
+pd.read_csv(" ", index_col = "column_name")
+df.set_index("column_name", inplace= True )
+df..reset_index( )  // it will take the index column back to the dsata.
+df.reset_index(drop=True ) // it will drop the index column.
+=============================
+delete rows/column from the dataframe
+df.drop( row/column-- index/label, axis=0/1, inplace= True/False)
+
+x= df.pop('salery') // it will drop salary column from the dataframe and assign it to variable x.
+
+del df['salery']  // similar to drop.
+
+===========================
+take a sample from the data
+df.sample(n=10, frac=.25)
+========================
+df['Team']= df['Team'].str.replace('what','with_what')
+df['Nmae'].str.lower.str.contains('singh')
+df['Nmae'].str.lower.str.startswith('ram')
+df['Nmae'].str.lower.str.endswith('ist')
+
+df['Name'].str.strip/lstrip/rstrip( )  //remove extra space
+df["Nmae"].str.upper/lower/title( )
+
+split first-last name
+first= df["Nmae"].str.split(" "),get(0)
+last= df["Nmae"].str.split(" "),get(1)
+
+df[['first','last']]= df['Name'].str.split(" ", expand=True)
+
+df["Nmae"].str.split(" ", expand=True, n=1)
+===============================
+acq= df.groupby("Acquirer") // grouping by Acquirer column
+acq.get_group('HDFC')
+
+acq.agg({"HDFC" : "mean","SBI" : "sum","RBL" : "avg"})
+
+acq.agg({'HDFC':['mean','sum','size']})
+================================
+conversions
+df['Name'] // gives a series
+df['Name'].tolist( )  // gives a list
+df['Name'].to_frame( )  // gives a dataframe
+===============================
+pip install xlrd
+
+data= pd.read_excel('file.xlsx', sheetname= [0,1])
+data[1]     // it will data of index 1 sheet.
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,   
+pip install pyxlsb
+
+import pandas as pd
+from pyxlsb import open_workbook as open_xlsb
+
+df = []
+
+with open_xlsb('txn_details.xlsb') as wb:
+    with wb.get_sheet(1) as sheet:
+        for row in sheet.rows():
+            df.append([item.v for item in row])
+
+df = pd.DataFrame(df[1:], columns=df[0])
+========================
